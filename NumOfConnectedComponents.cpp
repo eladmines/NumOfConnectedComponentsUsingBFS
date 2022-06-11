@@ -3,47 +3,72 @@
 #include <vector>
 #include <cstdlib>
 #include <list>
+#include <set>
 using namespace std;
 
 
-class Pair{
-    int src, dest;
+class Vertex{
+    int vertex;
+    set<Vertex> adj;
     public:
-    Pair(int src,int dest):src(src),dest(dest){};
-    int getSrc(){
-        return src;
+    Vertex(int vertex,set<Vertex> adj):vertex(vertex),adj(adj){};
+    int getVertex(){
+        return vertex;
     }
-    int getDest(){
-        return dest;
+
+    set<Vertex> getAdj(){
+        return adj;
     }
 };
 
 class Graph{
-    vector<int> vertex;
-    vector<Pair> edges;
+    vector<Vertex> v;
     public:
-    // constructor
-    Graph(vector<int> vertex,vector<Pair> edges):vertex(vertex),edges(edges){};
-    void Graph::BFS(int s)
-    {
-        vector<bool> visitedVertex;
-        // visitedVertex[i] is Flase until it has been visited
-        visitedVertex.resize(vertex.size(),false);
-        list<int> queue;
+    Graph(){};
+    void AddVertex(Vertex ver){
+        v.push_back(ver);
+    }
 
-        visitedVertex[s] = true;
-        queue.push_back(s);
-
+    list<Vertex> BFS(){
+        vector<bool> visited;
+        visited.resize(v.size(),false);
+        
+       // Create a queue for BFS
+        list<Vertex> queue;
+ 
+    // Mark the current node as visited and enqueue it
+        visited[0] = true;
+        cout<< visited.size();
+       
+        queue.push_back(v.front());
         while(!queue.empty())
+    {
+        // Dequeue a vertex from queue and print it
+        
+        Vertex s = queue.front();
+        cout << s.getVertex() << " ";
+        queue.pop_front();
+ 
+        // Get all adjacent vertices of the dequeued
+        // vertex s. If a adjacent has not been visited,
+        // then mark it visited and enqueue it
+        set<Vertex>::iterator itr;
+        for (itr = s.getAdj().begin(); itr!= s.getAdj().end(); itr++)
         {
-            s = queue.front();
-            cout << s << " ";
-            queue.pop_front();
-            for(
+            if (!visited[*(itr).getVertex()])
+            {
+                cout<<"fffffffff";
+                visited[s.getVertex()] = true;
+                queue.push_back(s);
+            }
         }
+        
+    }
+    return queue;
 
     }
-    
+
+
 };
 
 
@@ -51,21 +76,19 @@ class Graph{
 
 int main()
 {
-    // vector of graph edges as per the above diagram.
-    // Please note that the initialization vector in the below format will
-    // work fine in C++11, C++14, C++17 but will fail in C++98.
-    vector<int> vertex = {0,1,2,3};
-    vector<Pair> edges ={{0, 1}, {1, 2}, {2, 3}, {3, 0}};
-    Graph g = Graph(vertex,edges);
+    set<Vertex> v0a={1,2};
+    set<Vertex> v1a={2};
+    set<Vertex> v2a={0};
+    Vertex v0 = Vertex(0,v0a);
+    Vertex v1 = Vertex(1,v1a);
+    Vertex v2 = Vertex(2,v2a);
+    Graph g = Graph();
+    g.AddVertex(v0);
+    g.AddVertex(v1);
+    g.AddVertex(v2);
+    list<Vertex> q = g.BFS();
     system("pause");
-    // total number of nodes in the graph (labelled from 0 to 5)
-    int n = 6;
- 
-    // construct graph
 
- 
-    // print adjacency list representation of a graph
-   
-    system("pause");
+
     return 0;
 }
